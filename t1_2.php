@@ -22,14 +22,16 @@ class T{
     }
 
     public static function t2($i){
-        $i = intval($i);
+        $i = abs(intval($i));
         if ($i>10000){
             die('请输入<= 10000 的整数');
         }
+        //求值
         $arr = self::t2_pro($i);
         if (empty($arr)){
            die("NONE");
         }
+        //输出
         $data = [];
         foreach ($arr as $v) {
             $data[] = range($v[0], $v[1] + $v[0] - 1);
@@ -41,23 +43,13 @@ class T{
             echo PHP_EOL;
         }
     }
-    
+
     public static function t2_pro($s){
         $arr = [];
-        if ($s < 0) {
-            for ($i = -1; $i > $s; $i--) {
-                for ($j = 2; $j < abs($s); $j++) {
-                    if (2 * $s == (2 * $i + $j - 1) * $j) {
-                        $arr[] = [$i, $j];
-                    }
-                }
-            }
-        } else {
-            for ($i = 1; $i < $s; $i++) {
-                for ($j = 0; $j < $s; $j++) {
-                    if (2 * $s == (2 * $i + $j - 1) * $j) {
-                        $arr[] = [$i, $j];
-                    }
+        for ($i = 1; $i < $s; $i++) {
+            for ($j = 0; $j < $s; $j++) {
+                if (2 * $s == (2 * $i + $j - 1) * $j) {
+                    $arr[] = [$i, $j];
                 }
             }
         }

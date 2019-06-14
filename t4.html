@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+        #l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+        #r-result{height:100%;width:20%;float:left;}
+    </style>
+    <script charset="utf-8" src="jquery-mloading/jquery.mloading.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=koaO88q3Mmdi4Wr6wZGGSXAoogqswjMe"></script>
+    <title>旅行日志</title>
+</head>
+<body>
+<div id="allmap"></div>
+</body>
+</html>
+<script type="text/javascript">
+    // 百度地图API功能
+    var map = new BMap.Map("allmap");
+    // var point = new BMap.Point(116.404, 39.915);
+    map.centerAndZoom("武汉", 10);
+    map.enableScrollWheelZoom(true);
+    // 编写自定义函数,创建标注
+    function addMarker(point){
+        var marker = new BMap.Marker(point);
+        map.addOverlay(marker);
+    }
+
+    var navigationControl = new BMap.NavigationControl({
+        // 靠左上角位置
+        anchor: BMAP_ANCHOR_TOP_LEFT,
+        // LARGE类型
+        type: BMAP_NAVIGATION_CONTROL_LARGE,
+        // 启用显示定位
+        enableGeolocation: true
+    });
+    map.addControl(navigationControl);
+    // 添加定位控件
+    var geolocationControl = new BMap.GeolocationControl();
+    geolocationControl.addEventListener("locationSuccess", function(e){
+        // 定位成功事件
+        var address = '';
+        address += e.addressComponent.province;
+        address += e.addressComponent.city;
+        address += e.addressComponent.district;
+        address += e.addressComponent.street;
+        address += e.addressComponent.streetNumber;
+        alert("当前定位地址为：" + address);
+    });
+    geolocationControl.addEventListener("locationError",function(e){
+        // 定位失败事件
+        alert(e.message);
+    });
+    map.addControl(geolocationControl);
+
+
+    //已经旅游的城市
+    var yjCity = [
+        [114.306987,30.553943,"旅行时间：2019年6月14日17:11:11<br/>备注:我是文字标注哦1"],
+        [113.816009,30.717014,"旅行时间：2019年6月14日17:12:11<br/>备注:我是文字标注哦2"],
+        [114.41852,30.220978,"旅行时间：2019年6月14日17:13:11<br/>备注:我是文字标注哦3"],
+        [114.244321,30.387604,"旅行时间：2019年6月14日17:14:11<br/>备注:我是文字标注哦4"],
+    ];
+
+    yjCity.forEach(function (v,i) {
+        // console.log(v)
+        //标记
+        var point = new BMap.Point(v[0],v[1]);
+        map.centerAndZoom(point, 12);
+        var marker = new BMap.Marker(point);  // 创建标注
+        map.addOverlay(marker);              // 将标注添加到地图中
+        var label = new BMap.Label(v[2],{offset:new BMap.Size(20,-10)});
+        marker.setLabel(label);
+    })
+
+
+    //点击事件
+    function showInfo(e){
+        var point = new BMap.Point(e.point.lng,e.point.lat);
+        var marker = new BMap.Marker(point);  // 创建标注
+        map.addOverlay(marker);              // 将标注添加到地图中
+        var label = new BMap.Label("2018五一期间旅行计划",{offset:new BMap.Size(20,-10)});
+        marker.setLabel(label);
+    }
+    map.addEventListener("click", showInfo);
+
+</script>
+
+
+<!--
+
+
+ “旅行日志”。使用地图API，把你旅行到过的省份使用某种交
+互标注出来; 鼠标标放到相关省份后可以看到相关的时间和备
+注;对于没有去过的地方，可以在地图上直接“做计划”，比如，
+你之前没有去过浙江旅行，那直接可以地图上给浙江省做一个
+旅行计划，比如，写上 “计划2018五一期间旅行 ”。对于已经
+去过的省份，不可以再做计划;
+
+-->

@@ -66,12 +66,12 @@ class T{
 }
 
 //题1
-/*$a = "This is2 C programming text";
+$a = "This is C programming text";
 $b = "This2 is a text2 for C2 programming2";
-var_dump(T::t1($a, $b));*/
-
+var_dump(T::t1($a, $b));
+echo PHP_EOL;
 //题2
-T::t2(160000);
+T::t2(15);
 
 
 
